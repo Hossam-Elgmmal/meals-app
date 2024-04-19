@@ -1,6 +1,7 @@
 package com.route.mealsapp.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,12 +16,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.route.mealsapp.model.MealItem
@@ -29,7 +32,11 @@ import com.route.mealsapp.ui.theme.Purple
 import com.route.mealsapp.ui.theme.PurpleGrey
 
 @Composable
-fun MainContent() {
+fun MainContent(vm: MainViewModel = hiltViewModel()) {
+
+    LaunchedEffect(key1 = Unit) {
+        vm.getMeals()
+    }
 
     MealsAppTheme {
         Surface(
@@ -37,9 +44,11 @@ fun MainContent() {
             color = MaterialTheme.colorScheme.background
         ) {
             LazyColumn {
-                items(10) {
+                items(
+                    count = vm.mealsList.size,
+                ) { position ->
                     MealCard(
-                        meal = MealItem("1", "meat", "google", "delicious"),
+                        meal = vm.mealsList[position],
                         modifier = Modifier.padding(8.dp)
                     )
                 }
@@ -55,6 +64,9 @@ fun MealCard(meal: MealItem, modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxWidth()
             .background(Purple, RoundedCornerShape(4.dp))
+            .clickable {
+                // to do
+            }
             .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -78,7 +90,7 @@ fun MealCard(meal: MealItem, modifier: Modifier = Modifier) {
             Text(
                 text = meal.description,
                 style = MaterialTheme.typography.bodySmall,
-                maxLines = 1,
+                maxLines = 2,
                 overflow = TextOverflow.Ellipsis
 
             )
