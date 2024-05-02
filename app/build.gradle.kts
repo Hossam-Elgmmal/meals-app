@@ -80,6 +80,7 @@ dependencies {
     kapt(libs.hilt.compiler)
     implementation(libs.compose)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.core.splashscreen)
 }
 kapt {
     correctErrorTypes=true
